@@ -23,11 +23,11 @@ function TopResume() {
         </button>
       </div>
       <div className="hidden md:block justify-center w-1/2">
-      <div className="w-32 h-32  mx-auto">
+      <div className="w-1/2 items-center mx-auto">
         <img
             src={image}
             alt="Person"
-            className="rounded-full "
+            className="w-32 h-32 rounded-full "
         />
 
       </div>

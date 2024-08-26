@@ -26,11 +26,9 @@ const router = createBrowserRouter([
     element: <Works />,
   },
   {
-    path: "/WorkDetails",
+    path: "/works/:id",
     element: <WorkDetails />,
-  },
-  
-  
+  }  
 ]);
 
 function App(){

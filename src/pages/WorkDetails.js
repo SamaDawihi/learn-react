@@ -1,25 +1,46 @@
-import React from 'react';
-import work1 from '../assets/work1.png';
-import work2 from '../assets/work2.png';
-import work3 from '../assets/work3.png';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 function WorkDetails(){
+    const { id } = useParams();
+    const [work, setWork] = useState(null);
+
+    useEffect(() => {
+        const fetchWork = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/works/${id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const jsonData = await response.json();
+                setWork(jsonData.work); // Set the fetched work details
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        };
+
+        fetchWork();
+    }, [id]); // Fetch work details when `id` changes
+
+    if (!work) {
+        return <p>Loading...</p>; // Loading state
+    }
     return(
         <div className='flex flex-col space-y-6 w-3/4 mx-auto'>
-            <h1 className='text-4xl font-bold mb-2'>Designing Dashboards with usability in mind</h1>
+            <h1 className='text-4xl font-bold mb-2'>{work.title}</h1>
             <div className='flex space-x-10'>
                 <div className='block rounded-full px-2 bg-[#142850] text-white font-bold'>
-                    2020
+                {new Date(work.created_at).getFullYear()}
                 </div>
-                <p className='text-gray'>Dashboard, User Experience Design</p>
+                <p className='text-gray'>{work.tags}</p>
             </div>
-            <p>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
-            <img src={work1} alt='Work Image'/>
-            <h1 className='text-2xl font-bold mb-2'>Designing Dashboards</h1>
-            <h2 className='text-xl font-bold mb-2'>with usability in mind</h2>
-            <p>Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
-            <img src={work2} alt='Work Image'/>
-            <img src={work3} alt='Work Image'/>
+            <p>{work.content}</p>
+            <img src={work.image} alt='Work Image'/>
+            <h1 className='text-2xl font-bold mb-2'>Dublicated {work.title}</h1>
+            <h2 className='text-xl font-bold mb-2'>Dublicated {work.title}</h2>
+            <p>{work.content}</p>
+            <img src={work.image} alt='Dublicated Work Image'/>
+            <img src={work.image} alt='Dublicated Work Image'/>
         </div>
     );
 }

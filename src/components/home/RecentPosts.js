@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Post from './Post';
 
 function RecentPosts() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/articles'); 
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const jsonData = await response.json();
+        setData(jsonData.articles);
+      } catch (error) {
+        console.error('Fetch error:', error); // Handle any fetch errors
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <section className="bg-[#EDF7FA] py-6">
         <div className="mx-auto w-3/4">
@@ -14,8 +33,14 @@ function RecentPosts() {
                 </a>
             </div>
             <div className="mt-6 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-                <Post />
-                <Post />
+              {
+                data.length > 0 ?
+                data.map((article) => (
+                  <Post key={article.id} article={article} />
+                ))
+                :
+                <p>No posts available</p>
+              }
             </div>
         </div>
     </section>

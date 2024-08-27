@@ -4,17 +4,20 @@ import { useParams } from 'react-router-dom';
 function WorkDetails(){
     const { id } = useParams();
     const [work, setWork] = useState(null);
-
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchWork = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(`http://localhost:3001/works/${id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const jsonData = await response.json();
+                setIsLoading(false);
                 setWork(jsonData.work); // Set the fetched work details
             } catch (error) {
+                setIsLoading(false);
                 console.error('Fetch error:', error);
             }
         };
@@ -22,7 +25,7 @@ function WorkDetails(){
         fetchWork();
     }, [id]); // Fetch work details when `id` changes
 
-    if (!work) {
+    if (isLoading) {
         return <p>Loading...</p>; // Loading state
     }
     return(

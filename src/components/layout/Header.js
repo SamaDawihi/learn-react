@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import Cookies from "js-cookie";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  var token = Cookies.get("token");
 
   return (
     <header className="p-4">
@@ -11,6 +13,9 @@ function Header() {
           <a href="/Works" className="hover:text-[#FF6464] hover:font-bold">Works</a>
           <a href="/Blog" className="hover:text-[#FF6464] hover:font-bold">Blog</a>
           <a href="/Contact" className="hover:text-[#FF6464] hover:font-bold">Contact</a>
+          {!token && <a href="/Register" className="hover:text-[#FF6464] hover:font-bold">Register</a>}
+          {!token && <a href="/Login" className="hover:text-[#FF6464] hover:font-bold">Login</a>}
+          {token && <a href="/Profile" className="hover:text-[#FF6464] hover:font-bold">Profile</a>}
         </nav>
         <button
           className="md:hidden ml-auto"
